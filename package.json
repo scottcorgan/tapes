@@ -1,0 +1,39 @@
+{
+  "name": "tapes",
+  "version": "0.1.0",
+  "description": "A more robust tap-producing test harness for node and browsers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottcorgan/tapes.git"
+  },
+  "keywords": [
+    "tape",
+    "tap",
+    "test",
+    "before",
+    "after",
+    "beforeEach",
+    "afterEach",
+    "harness"
+  ],
+  "author": "Scott Corgan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scottcorgan/tapes/issues"
+  },
+  "homepage": "https://github.com/scottcorgan/tapes",
+  "dependencies": {
+    "tape": "2.10.x",
+    "async": "0.2.x",
+    "extend": "1.2.x",
+    "promise": "4.0.x",
+    "glob": "3.2.x"
+  },
+  "bin": {
+    "tapes": "./bin/tapes"
+  }
+}
