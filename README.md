@@ -20,6 +20,8 @@ npm install tapes --save-dev
 var suite = require('tapes');
 
 suite('a set of some tests', function (t) {
+  
+  // FINALLY!
   t.beforeEach(function (t) {
     // do some set up for each test
     t.end();
@@ -35,6 +37,7 @@ suite('a set of some tests', function (t) {
     t.end();
   });
   
+  // SWEET!
   t.suite('a nested set of tests', function (t) {
     t.test('this inherits from the parent suite', function (t) {
       t.ok(true, 'is true too');
@@ -42,6 +45,12 @@ suite('a set of some tests', function (t) {
     });
   });
 });
+```
+
+### Running from the command line
+
+```
+$ node test/index.js
 ```
 
 ### Running from withing package.json
