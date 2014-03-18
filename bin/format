@@ -34,7 +34,7 @@ tap.on('extra', function (extra) {
 tap.on('results', function (res) {
   
   out.push('\n\n')
-  out.push(res.asserts.length + ' assertions\n');
+  out.push(res.asserts.length + ' tests\n');
   out.push(chalk.green(res.pass.length + ' passed\n'));
   
   if (res.fail.length) out.push(chalk.red(res.fail.length + ' failed'));
