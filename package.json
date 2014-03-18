@@ -1,7 +1,7 @@
 {
   "name": "tapes",
   "version": "0.1.0",
-  "description": "A more robust tap-producing test harness for node and browsers",
+  "description": "A more robust tap-producing test harness for node and browsers. Adds suites, beforeEach, afterEach, etc.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
