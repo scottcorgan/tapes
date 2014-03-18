@@ -3,7 +3,7 @@ var async = require('async');
 var extend = require('extend');
 var Promise = require('promise');
 
-module.exports = function suite (name, setupRunner, options) {
+var suite = function (name, setupRunner, options) {
   var endNoop = function (t) {t.end();};
   var afterEach = [];
   var beforeEach = [];
@@ -73,15 +73,6 @@ module.exports = function suite (name, setupRunner, options) {
       t.end();
     });
   });
-
 };
 
-
-// Output json
-// test.createStream({ objectMode: true }).on('data', function (row) {
-//     console.log(JSON.stringify(row))
-// });
-
-// OR
-
-// test.createStream().pipe(process.stdout);
+module.exports = suite;
