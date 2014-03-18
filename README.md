@@ -62,6 +62,12 @@ test('a set of some tests', function (t) {
 ### Running from the command line
 
 ```
+$ tapes test/**/*.js
+```
+
+or 
+
+```
 $ node test/index.js
 ```
 
@@ -74,6 +80,25 @@ $ node test/index.js
     "test": "tapes test/**/*.js"
   }
 }
+```
+
+### Formatted output
+
+Tapes provides simple TAP output formatting by piping your tap output to `tapes-format`.
+
+```js
+{
+  "name": "my-module",
+  "scripts": {
+    "test": "tapes test/**/*.js | tapes-format"
+  }
+}
+```
+
+or if installed globally
+
+```
+$ tapes test/index.js | tapes-format
 ```
 
 ## Methods
