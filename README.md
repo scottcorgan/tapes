@@ -4,9 +4,10 @@ A more robust tap-producing test harness for node and browsers.
 
 Adds the following to [tape](https://github.com/substack/tape) without changing your normal workflow or adding globals:
 
-* suites/nested tests (betters serparation of test subjects)
+* suites and nested suites
 * beforeEach()
 * afterEach()
+* better nested tests
 
 ## Install
 
@@ -90,4 +91,8 @@ Create nested suite within the context of the current suite. See [suite()](#suit
 
 ## Assertions
 
-All of [tape's](https://github.com/substack/tape) asserts are available. Please see [tape's documentation](https://github.com/substack/tape#tokvalue-msg) for a complete list.
+All of [tape's](https://github.com/substack/tape) assertions are available. Please see [tape's documentation](https://github.com/substack/tape#tokvalue-msg) for a complete list.
+
+## License
+
+MIT
