@@ -1,6 +1,6 @@
 {
   "name": "tapes",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A more robust tap-producing test harness for node and browsers. Adds beforeEach, afterEach, etc.",
   "main": "index.js",
   "repository": {
@@ -26,14 +26,9 @@
   "dependencies": {
     "tape": "2.10.x",
     "async": "0.2.x",
-    "glob": "3.2.x",
-    "chalk": "^0.4.0",
-    "duplexer": "^0.1.1",
-    "tap-parser": "^0.4.3",
-    "through2": "^0.4.1"
+    "glob": "3.2.x"
   },
   "bin": {
-    "tapes": "./bin/tapes",
-    "tapes-format": "./bin/format"
+    "tapes": "./bin/tapes"
   }
 }
