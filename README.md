@@ -84,6 +84,10 @@ Do teardown for the current etst suite. The callback will be passed an object wi
 
 Create a new test within the current suite. This method acts exactly like [tape's](https://github.com/substack/tape) normal [`test` method](https://github.com/substack/tape#testname-cb). You cannot create suites within tests.
 
+### t.suite(name, callback)
+
+Create nested suite within the context of the current suite. See [suite()](#suitename-callback) for a more detailed description.
+
 ## Assertions
 
 All of [tape's](https://github.com/substack/tape) asserts are available. Please see [tape's documentation](https://github.com/substack/tape#tokvalue-msg) for a complete list.
