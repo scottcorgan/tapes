@@ -81,3 +81,7 @@ module.exports = function suite (name, setupRunner, options) {
 // test.createStream({ objectMode: true }).on('data', function (row) {
 //     console.log(JSON.stringify(row))
 // });
+
+// OR
+
+// test.createStream().pipe(process.stdout);
