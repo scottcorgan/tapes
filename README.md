@@ -4,12 +4,11 @@ A more robust tap-producing test harness for node and browsers.
 
 Adds the following to [tape](https://github.com/substack/tape) without changing your normal workflow or adding globals:
 
-* suites and nested suites
 * beforeEach()
 * afterEach()
 * better nested tests
 
-Each `beforeEach()` and `afterEach()` will also be called for each child/nested test or suite (similar to [Mocha's nested suites](http://visionmedia.github.io/mocha/))
+Each `beforeEach()` and `afterEach()` will also be called for each child/nested test (similar to [Mocha's nested suites](http://visionmedia.github.io/mocha/))
 
 ## Install
 
@@ -20,9 +19,9 @@ npm install tapes --save-dev
 ## Usage
 
 ```js
-var suite = require('tapes');
+var test = require('tapes');
 
-suite('a set of some tests', function (t) {
+test('a set of some tests', function (t) {
   
   // FINALLY!
   t.beforeEach(function (t) {
@@ -41,12 +40,16 @@ suite('a set of some tests', function (t) {
   });
   
   // SWEET!
-  t.suite('a nested set of tests', function (t) {
+  t.test('a nested set of tests', function (t) {
     t.test('this inherits from the parent suite', function (t) {
       t.ok(true, 'is true too');
       t.end();
     });
+    
+    t.end();
   });
+  
+  t.end();
 });
 ```
 
@@ -69,11 +72,11 @@ $ node test/index.js
 
 ## Methods
 
-### suite(name, callback)
+### test(name, callback)
 
-Create a new suite of tests. No need to call `t.end()` on a test suite; suite will automatically end after all test have finished.
+Create a new tests, exactlty the same as tapes's test() command.
 
-The callback is passed the normal instance of the `Tape` class in order to create tests, setups, teardowns, and nested suites. This suite instance does not provide assertion methods, but they are available inside of suite tests.
+The callback is passed the normal instance of the `Tape` class in order to create tests, setups and teardowns.
 
 ### t.beforeEach(callback)
 
@@ -85,11 +88,7 @@ Do teardown for the current etst suite. The callback will be passed an object wi
 
 ### t.test(name, callback)
 
-Create a new test within the current suite. This method acts exactly like [tape's](https://github.com/substack/tape) normal [`test` method](https://github.com/substack/tape#testname-cb). You cannot create suites within tests.
-
-### t.suite(name, callback)
-
-Create nested suite within the context of the current suite. See [suite()](#suitename-callback) for a more detailed description.
+Create a new test within the current test. This method acts exactly like [tape's](https://github.com/substack/tape) normal [`test` method](https://github.com/substack/tape#testname-cb). Each of these nested tests also has availbe the `beforeEach()` and `afterEach()` functions.
 
 ## Assertions
 
