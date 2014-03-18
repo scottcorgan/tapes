@@ -29,8 +29,6 @@
   "dependencies": {
     "tape": "2.10.x",
     "async": "0.2.x",
-    "extend": "1.2.x",
-    "promise": "4.0.x",
     "glob": "3.2.x"
   },
   "bin": {

@@ -1,78 +1,45 @@
-var test = require('tape');
+var tape = require('tape');
 var async = require('async');
-var extend = require('extend');
-var Promise = require('promise');
 
-var suite = function (name, setupRunner, options) {
-  var endNoop = function (t) {t.end();};
-  var afterEach = [];
-  var beforeEach = [];
-  var tests = tests || [];
-  var end = false;
+var test = function (name, fn, _before, _after) {
+  var before = _before || [];
+  var after = _after || [];
   
-  // Transfer options to nested suites
-  if (options) {
-    beforeEach = options.beforeEach || [endNoop];
-    afterEach = options.afterEach || [endNoop];
-  }
-  
-  test(name, function (t) {
-    var suiteActions = {};
+  tape(name, function (t) {
+    var tEnd = t.end.bind(t);
     
-    suiteActions.beforeEach = function (fn) {
-      beforeEach.push(fn);
+    t.beforeEach = function (fn) {
+      before.push(fn);
     };
     
-    suiteActions.afterEach = function (fn) {
-      afterEach.push(fn);
+    t.afterEach = function (fn) {
+      after.push(fn);
     };
     
-    suiteActions.test = function (name, fn, title) {
-      t.test(name, function (q) {
-        tests.push(new Promise(function (resolve, reject) {
-          runBeforeEach(function () {
-            var end = q.end;
-            
-            q.end = function () {
-              runAfterEach(function () {
-                end.call(q);
-                resolve();
-              });
-            };
-            
-            fn.call(q, q);
+    t.test = function (tName, tFn) {
+      test(tName, function (q) {
+        var qEnd = q.end.bind(q);
+        
+        q.end = function () {
+          runWrapperFns(after, function () {
+            qEnd();
           });
-        }));
-      });
+        };
+        
+        tFn(q);
+      }, before.slice(0), after.slice(0));
     };
     
-    suiteActions.suite = function (name, setupRunner) {
-      suite(name, setupRunner, extend(options, {
-        beforeEach: beforeEach,
-        afterEach: afterEach
-      }));
-    };
-    
-    // Run it all
-    setupRunner(suiteActions);    
-    
-    function runBeforeEach (callback) {
-      async.eachSeries(beforeEach, function (before, done) {
-        before({end: done});
-      }, callback);
-    }
-    
-    function runAfterEach (callback) {
-      async.eachSeries(afterEach, function (after, done) {
-        after({end: done});
-      }, callback);
-    }
-    
-    // All done
-    Promise.all(tests).then(function () {
-      t.end();
+    runWrapperFns(before, function () {
+      fn(t);
     });
   });
 };
 
-module.exports = suite;
+function runWrapperFns (fns, callback) {
+  async.eachSeries(fns, function (fn, done) {
+    fn({end: done});
+  }, callback);
+}
+
+module.exports = test;
