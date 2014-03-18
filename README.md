@@ -41,6 +41,12 @@ test('a set of some tests', function (t) {
   
   // SWEET!
   t.test('a nested set of tests', function (t) {
+  
+    t.beforeEach(function (t) {
+      // Runs parent beforeEach() function as well as this one, in sequence.
+      t.end();
+    });
+  
     t.test('this inherits from the parent suite', function (t) {
       t.ok(true, 'is true too');
       t.end();
