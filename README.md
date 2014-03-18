@@ -9,6 +9,8 @@ Adds the following to [tape](https://github.com/substack/tape) without changing 
 * afterEach()
 * better nested tests
 
+Each `beforeEach()` and `afterEach()` will also be called for each child/nested test or suite (similar to [Mocha's nested suites](http://visionmedia.github.io/mocha/))
+
 ## Install
 
 ```
