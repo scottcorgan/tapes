@@ -1,16 +1,11 @@
 {
-  "name": "runner",
-  "version": "2.0.0",
-  "description": "A more robust tap-producing, tape compatible, test harness for node and browsers. Namespacing, context passing, beforeEach, afterEach, etc ...",
+  "name": "tapes",
+  "version": "0.4.1",
+  "description": "A more robust tap-producing test harness for node and browsers. Adds beforeEach, afterEach, etc.",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/scottcorgan/runner.git"
-  },
-  "scripts": {
-    "test": "npm run test-all && npm run test-only",
-    "test-all": "node test/index.js | tap-spec",
-    "test-only": "node test/only.js | tap-spec"
+    "url": "https://github.com/scottcorgan/tapes.git"
   },
   "keywords": [
     "tape",
@@ -25,21 +20,15 @@
   "author": "Scott Corgan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/scottcorgan/runner/issues"
+    "url": "https://github.com/scottcorgan/tapes/issues"
   },
-  "homepage": "https://github.com/scottcorgan/runner",
+  "homepage": "https://github.com/scottcorgan/tapes",
   "dependencies": {
-    "async": "^0.9.0",
-    "glob": "^5.0.3",
-    "lodash.assign": "^3.0.0",
-    "lodash.clonedeep": "^3.0.0",
-    "tape": "*"
-  },
-  "devDependencies": {
-    "clear-require": "^1.0.1",
-    "tap-spec": "^2.2.2"
+    "tape": "2.10.x",
+    "async": "0.2.x",
+    "glob": "3.2.x"
   },
   "bin": {
-    "runner": "./bin/runner"
+    "tapes": "./bin/tapes"
   }
 }
