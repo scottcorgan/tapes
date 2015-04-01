@@ -1,68 +1,47 @@
-# tapes
+# runner
 
-A more robust tap-producing test harness for node and browsers.
+A more robust tap-producing, [tape](https://github.com/substack/tape) compatible, test harness for node and browsers. This is like if [tape](https://github.com/substack/tape) did [Crossfit](http://fitnesspainfree.com/wp-content/uploads/2013/12/Hammer.jpg).
 
 Adds the following to [tape](https://github.com/substack/tape) without changing your normal workflow or adding globals:
 
-* beforeEach()
-* afterEach()
-* better nested tests
+#### Namespacing
+
+Instead of having awkward `describe()` and `it()` as it is in a typical BDD test runner, this runner lets you use obvious namespacing to build chains of related tests. This not only makes it easier to read the tests, but easier to read the output when used with a module like [tap-spec](https://github.com/scottcorgan/tap-spec).
+
+```
+var test = require('runner');
+
+var namesapce = test('namespace');
+
+namespace.test('my test', function (t) {
+  
+  t.end();
+});
+
+var nestedNamespace = namespace.test('nested');
+
+nestedNamespace.test('another test', function (t) {
+
+  t.end();  
+});
+```
+
+#### beforeEach()
+
+#### afterEach()
 
 Each `beforeEach()` and `afterEach()` will also be called for each child/nested test (similar to [Mocha's nested suites](http://visionmedia.github.io/mocha/))
 
 ## Install
 
 ```
-npm install tapes --save-dev
-```
-
-## Usage
-
-```js
-var test = require('tapes');
-
-test('a set of some tests', function (t) {
-  
-  // FINALLY!
-  t.beforeEach(function (t) {
-    // do some set up for each test
-    t.end();
-  });
-  
-  t.afterEach(function (t) {
-    // do some tear down for each test
-    t.end();
-  });
-  
-  t.test('testing something', function (t) {
-    t.ok(true, 'is true');
-    t.end();
-  });
-  
-  // SWEET!
-  t.test('a nested set of tests', function (t) {
-  
-    t.beforeEach(function (t) {
-      // Runs parent beforeEach() function as well as this one, in sequence.
-      t.end();
-    });
-  
-    t.test('this inherits from the parent suite', function (t) {
-      t.ok(true, 'is true too');
-      t.end();
-    });
-    
-    t.end();
-  });
-  
-  t.end();
-});
+npm install runner --save-dev
 ```
 
 ### Running from the command line
 
 ```
-$ tapes test/**/*.js
+$ runner test/**/*.js
 ```
 
 or 
@@ -77,54 +56,14 @@ $ node test/index.js
 {
   "name": "my-module",
   "scripts": {
-    "test": "tapes test/**/*.js"
+    "test": "runner test/**/*.js"
   }
 }
 ```
 
-### Formatted output
-
-Tapes provides simple TAP output formatting by piping your tap output to `tapes-format`.
-
-```js
-{
-  "name": "my-module",
-  "scripts": {
-    "test": "tapes test/**/*.js | tapes-format"
-  }
-}
-```
-
-or if installed globally
+## Run Tests
 
 ```
-$ tapes test/index.js | tapes-format
+npm install
+npm test
 ```
-
-## Methods
-
-### test(name, callback)
-
-Create a new tests, exactlty the same as tapes's test() command.
-
-The callback is passed the normal instance of the `Tape` class in order to create tests, setups and teardowns.
-
-### t.beforeEach(callback)
-
-Do setup for the current test suite. The callback will be passed an object with and `end()` method. This must be called to conclude the setup.
-
-### t.afterEach(callback)
-
-Do teardown for the current etst suite. The callback will be passed an object with and `end()` method. This must be called to conclude the teardown.
-
-### t.test(name, callback)
-
-Create a new test within the current test. This method acts exactly like [tape's](https://github.com/substack/tape) normal [`test` method](https://github.com/substack/tape#testname-cb). Each of these nested tests also has availbe the `beforeEach()` and `afterEach()` functions.
-
-## Assertions
-
-All of [tape's](https://github.com/substack/tape) assertions are available. Please see [tape's documentation](https://github.com/substack/tape#tokvalue-msg) for a complete list.
-
-## License
-
-MIT
