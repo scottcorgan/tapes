@@ -1,60 +1,87 @@
-var tape = require('tape');
 var async = require('async');
+var extend = require('lodash.assign');
+var omit = require('lodash.omit');
 
-var test = function (name, fn, _before, _after) {
-  var before = _before || [];
-  var after = _after || [];
+module.exports = function (tape) {
   
-  tape(name, function (t) {
-    var tEnd = t.end.bind(t);
+  return function (testName, run) {
     
-    t.beforeEach = function (fn) {
-      before.push(fn);
-    };
-    
-    t.afterEach = function (fn) {
-      after.push(fn);
-    };
-    
-    t.test = function (tName, tFn) {
-      test(tName, function (q) {
-        var qEnd = q.end.bind(q);
-        var qPlan = q.plan.bind(q);
-        var executedAfters = false;
+    tape(testName, function (t) {
+      var beforeEachCollection = [];
+      var afterEachCollection = [];
+      var _tTest = t.test.bind(t);
+      
+      t.beforeEach = function (callback) {
         
-        q.end = function () {
-          runWrapperFns(after, function () {
-            executedAfters = true;
-            qEnd();
-          });
-        };
+        beforeEachCollection.push(callback);
+        return t;
+      };
+      
+      t.afterEach = function (callback) {
         
-        q.plan = function (numberofAssertions) {
-          qPlan(numberofAssertions);
-        };
+        afterEachCollection.push(callback);
+        return t;
+      };
+      
+      t.test = function (testName, testRun) {
         
-        q.on('end', function (num) {
-          if (!executedAfters) runWrapperFns(after, function () {
-            executedAfters = true;
+        _tTest(testName, function (ctx) {
+          
+          var end = ctx.end.bind(ctx);
+          
+          async.series({
+            beforeEach: function (done) {
+              
+              async.eachSeries(beforeEachCollection, function (fn, done) {
+                
+                var beforeCtx = extend(ctx, {
+                  end: function () {
+                    
+                    // Ensure we pass context from beforeEach to 
+                    // test runner
+                    ctx = extend(ctx, omit(beforeCtx, 'end'));
+                    done();
+                  }
+                });
+                
+                fn(beforeCtx);
+              }, done);
+            },
+            runner: function (done) {
+              
+              ctx.end = done;
+              testRun(ctx);
+            },
+            afterEach: function (done) {
+              
+              async.eachSeries(afterEachCollection, function (fn, done) {
+                
+                var afterCtx = extend(ctx, {
+                 end: function () {
+                   
+                   // Ensure we pass context from afterEach to 
+                   // test runner
+                   ctx = extend(ctx, omit(afterCtx, 'end'));
+                   done();
+                 }
+               });
+               
+               fn(afterCtx);
+              }, done);
+            }
+          }, function (err, results) {
+            
+            end(err);
           });
         });
-        
-        tFn(q);
-      }, before.slice(0), after.slice(0));
-    };
-    
-    runWrapperFns(before, function () {
-      fn(t);
+      };
+      
+      // TODO: implement test.only()
+      
+      extend(t.test, _tTest);
+      run(t);
+      
+      return t;
     });
-  });
+  };
 };
-
-function runWrapperFns (fns, callback) {
-  callback = callback || function () {};
-  
-  async.eachSeries(fns, function (fn, done) {
-    fn({end: done});
-  }, callback);
-}
-
-module.exports = test;
