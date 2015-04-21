@@ -1,12 +1,17 @@
 var async = require('async');
 var extend = require('lodash.assign');
-var omit = require('lodash.omit');
 
 module.exports = function (tape) {
+  
+  // Ensure we have a TAP test runner
+  if (!tape || typeof tape !== 'function') {
+    throw new Error('A TAP test runner is required');
+  }
   
   return function (testName, run) {
     
     tape(testName, function (t) {
+      
       var beforeEachCollection = [];
       var afterEachCollection = [];
       var _tTest = t.test.bind(t);
@@ -23,64 +28,54 @@ module.exports = function (tape) {
         return t;
       };
       
+      // Overwrite the test function so that the beforeEach and
+      // afterEach can run
       t.test = function (testName, testRun) {
         
+        // Create test case
         _tTest(testName, function (ctx) {
           
           var end = ctx.end.bind(ctx);
           
-          async.series({
-            beforeEach: function (done) {
-              
-              async.eachSeries(beforeEachCollection, function (fn, done) {
-                
-                var beforeCtx = extend(ctx, {
-                  end: function () {
-                    
-                    // Ensure we pass context from beforeEach to 
-                    // test runner
-                    ctx = extend(ctx, omit(beforeCtx, 'end'));
-                    done();
-                  }
-                });
-                
-                fn(beforeCtx);
-              }, done);
-            },
-            runner: function (done) {
-              
-              ctx.end = done;
-              testRun(ctx);
-            },
-            afterEach: function (done) {
-              
-              async.eachSeries(afterEachCollection, function (fn, done) {
-                
-                var afterCtx = extend(ctx, {
-                 end: function () {
-                   
-                   // Ensure we pass context from afterEach to 
-                   // test runner
-                   ctx = extend(ctx, omit(afterCtx, 'end'));
-                   done();
-                 }
-               });
-               
-               fn(afterCtx);
-              }, done);
-            }
-          }, function (err, results) {
+          // Do all the things
+          async.series([
+            runBeforeEach,
+            runTest,
+            runAfterEach
+          ], end);
+          
+          function runBeforeEach (beforeEachDone) {
             
-            end(err);
-          });
+            async.eachSeries(beforeEachCollection, function (fn, done) {
+              
+              fn(extend(ctx, {
+                end: done
+              }));
+            }, beforeEachDone);
+          }
+          
+          function runTest (done) {
+            
+            ctx.end = done;
+            testRun(ctx);
+          }
+          
+          function runAfterEach (afterEachDone) {
+            
+            async.eachSeries(afterEachCollection, function (fn, done) {
+              
+            fn(extend(ctx, {
+              end: done
+            }));
+            }, afterEachDone);
+          }
         });
-      };
+      }
       
-      // TODO: implement test.only()
-      
-      extend(t.test, _tTest);
+      // Run the test
       run(t);
       
+      // Keeps it chainable
       return t;
     });
   };
