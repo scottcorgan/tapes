@@ -2,7 +2,7 @@
 
 A more robust tap-producing test harness for node and browsers.
 
-Adds the following to [tape](https://github.com/substack/tape) without changing your normal workflow or adding globals:
+Adds the following to a provided [tape](https://github.com/substack/tape) instance without changing your normal workflow or adding globals:
 
 * beforeEach()
 * afterEach()
@@ -18,87 +18,37 @@ npm install tapes --save-dev
 
 ## Usage
 
+Whatever values you set on the context (usually `t`) passed into the `beforeEach` and `afterEach` functions will get passed to the nested tests. Also, everything is chainable.
+
 ```js
-var test = require('tapes');
+var tape = require('tape');
+var test = require('tapes')(tape); // Pass in your flavor of tape/tap
 
 test('a set of some tests', function (t) {
   
   // FINALLY!
-  t.beforeEach(function (t) {
-    // do some set up for each test
-    t.end();
-  });
-  
-  t.afterEach(function (t) {
-    // do some tear down for each test
-    t.end();
-  });
-  
-  t.test('testing something', function (t) {
-    t.ok(true, 'is true');
-    t.end();
-  });
-  
-  // SWEET!
-  t.test('a nested set of tests', function (t) {
-  
-    t.beforeEach(function (t) {
-      // Runs parent beforeEach() function as well as this one, in sequence.
-      t.end();
-    });
-  
-    t.test('this inherits from the parent suite', function (t) {
-      t.ok(true, 'is true too');
-      t.end();
-    });
+  t
+    .beforeEach(function (t) {
     
+      // do some set up for each test
+      
+      t.someCustomValue = 'my value';
+      t.end();
+    })
+    .afterEach(function (t) {
+    
+      // do some tear down for each test
+      t.end();
+    });
+
+  t.test('testing something', function (t) {
+  
+    t.equal(t.myCustomValue, 'my value', 'access to the context object');
     t.end();
   });
   
   t.end();
 });
-```
-
-### Running from the command line
-
-```
-$ tapes test/**/*.js
-```
-
-or 
-
-```
-$ node test/index.js
-```
-
-### Running from withing package.json
-
-```js
-{
-  "name": "my-module",
-  "scripts": {
-    "test": "tapes test/**/*.js"
-  }
-}
-```
-
-### Formatted output
-
-Tapes provides simple TAP output formatting by piping your tap output to `tapes-format`.
-
-```js
-{
-  "name": "my-module",
-  "scripts": {
-    "test": "tapes test/**/*.js | tapes-format"
-  }
-}
-```
-
-or if installed globally
-
-```
-$ tapes test/index.js | tapes-format
 ```
 
 ## Methods
