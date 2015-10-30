@@ -82,25 +82,6 @@ $ node test/index.js
 }
 ```
 
-### Formatted output
-
-Tapes provides simple TAP output formatting by piping your tap output to `tapes-format`.
-
-```js
-{
-  "name": "my-module",
-  "scripts": {
-    "test": "tapes test/**/*.js | tapes-format"
-  }
-}
-```
-
-or if installed globally
-
-```
-$ tapes test/index.js | tapes-format
-```
-
 ## Methods
 
 ### test(name, callback)
