@@ -1,6 +1,6 @@
 {
   "name": "tapes",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A more robust tap-producing test harness for node and browsers. Adds beforeEach, afterEach, etc.",
   "main": "index.js",
   "repository": {
