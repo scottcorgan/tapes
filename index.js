@@ -17,7 +17,7 @@ var test = function (name, fn, _before, _after) {
     };
     
     t.test = function (tName, tFn) {
-      test(tName, function (q) {
+      test(name + ' ' + tName, function (q) {
         var qEnd = q.end.bind(q);
         var qPlan = q.plan.bind(q);
         var executedAfters = false;
