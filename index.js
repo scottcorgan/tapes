@@ -1,7 +1,12 @@
-var tape = require('tape');
 var async = require('async');
 
-var test = function (name, fn, _before, _after, only, skip) {
+function tapes (tape) {
+  return function (name, fn, _before, _after, only) {
+    return test(tape, name, fn, _before, _after, only);
+  };
+}
+
+function test (tape, name, fn, _before, _after, only, skip) {
   var before = _before || [];
   var after = _after || [];
   var testFn = only
@@ -24,7 +29,7 @@ var test = function (name, fn, _before, _after, only, skip) {
         ? test.only
         : skip ? test.skip : test;
 
-      tTestFn(name + ' ' + tName, function (q) {
+      tTestFn(tape, name + ' ' + tName, function (q) {
         var qEnd = q.end.bind(q);
         var qPlan = q.plan.bind(q);
         var executedAfters = false;
@@ -80,4 +85,4 @@ function runWrapperFns (fns, callback) {
   }, callback);
 }
 
-module.exports = test;
+module.exports = tapes;

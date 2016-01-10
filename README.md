@@ -19,7 +19,9 @@ npm install tapes --save-dev
 ## Usage
 
 ```js
-var test = require('tapes');
+var tape = require('tape');
+var tapes = require('tapes');
+var test = tapes(tape);
 
 test('a set of some tests', function (t) {
   
@@ -83,6 +85,10 @@ $ node test/index.js
 ```
 
 ## Methods
+
+### var test = tapes(tape)
+
+Initializer receives a `tape` instance (versions 3.x and 4.x are acceptable). Returns test function.
 
 ### test(name, callback)
 
