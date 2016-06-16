@@ -25,8 +25,7 @@
   "homepage": "https://github.com/scottcorgan/tapes",
   "dependencies": {
     "async": "^1.5.0",
-    "glob": "^6.0.3",
-    "tape": "*"
+    "glob": "^6.0.3"
   },
   "bin": {
     "tapes": "./bin/tapes"
