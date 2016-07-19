@@ -1,6 +1,17 @@
 var async = require('async');
 
 function tapes (tape) {
+  // Allow consumers of `tapes` to patch the core `tape` library.
+  test.Test = tape.Test;
+
+  test.only = function (name, fn, _before, _after) {
+    return test(name, fn, _before, _after, true);
+  };
+
+  test.skip = function (name, fn, _before, _after) {
+    return test(name, fn, _before, _after, false, true);
+  };
+
   return function (name, fn, _before, _after, only) {
     return test(tape, name, fn, _before, _after, only);
   };
@@ -68,17 +79,6 @@ function test (tape, name, fn, _before, _after, only, skip) {
     });
   });
 };
-
-test.only = function (name, fn, _before, _after) {
-  return test(name, fn, _before, _after, true);
-};
-
-test.skip = function (name, fn, _before, _after) {
-  return test(name, fn, _before, _after, false, true);
-};
-
-// Allow consumers of `tapes` to patch the core `tape` library.
-test.Test = tape.Test;
 
 function runWrapperFns (fns, callback) {
   callback = callback || function () {};
