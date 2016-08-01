@@ -1,8 +1,12 @@
 var async = require('async');
 
-function tapes (tape) {
+var delimiter;
+
+function tapes (tape, opts) {
   // Allow consumers of `tapes` to patch the core `tape` library.
   test.Test = tape.Test;
+
+  delimiter = opts && opts.delimiter || ' ';
 
   test.only = function (name, fn, _before, _after) {
     return test(name, fn, _before, _after, true);
@@ -40,7 +44,7 @@ function test (tape, name, fn, _before, _after, only, skip) {
         ? test.only
         : skip ? test.skip : test;
 
-      tTestFn(tape, name + ' ' + tName, function (q) {
+      tTestFn(tape, name + delimiter + tName, function (q) {
         var qEnd = q.end.bind(q);
         var qPlan = q.plan.bind(q);
         var executedAfters = false;
