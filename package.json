@@ -27,6 +27,13 @@
     "async": "^1.5.0",
     "glob": "^6.0.3"
   },
+  "devDependencies": {
+    "tap": "^6.3.0",
+    "tape": "^4.6.0"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
   "bin": {
     "tapes": "./bin/tapes"
   }
